@@ -614,7 +614,7 @@ func TestBasic5(t *testing.T) {
 		t.Fatal("expecting '"+`{"what is a wren?":"a bird"}`+"'", "got",
 			token.String())
 	}
-	_ = token.Value().(map[string]interface{})
+	_ = token.Value().(map[string]any)
 
 	if get(basicJSON, "").Value() != nil {
 		t.Fatal("should be nil")
@@ -622,8 +622,8 @@ func TestBasic5(t *testing.T) {
 
 	get(basicJSON, "vals.hello")
 
-	type msi = map[string]interface{}
-	type fi = []interface{}
+	type msi = map[string]any
+	type fi = []any
 	mm := Parse(basicJSON).Value().(msi)
 	fn := mm["loggy"].(msi)["programmers"].(fi)[1].(msi)["firstName"].(string)
 	if fn != "Jason" {
@@ -776,8 +776,8 @@ var exampleJSON = `{
 }`
 
 func TestUnmarshalMap(t *testing.T) {
-	var m1 = Parse(exampleJSON).Value().(map[string]interface{})
-	var m2 map[string]interface{}
+	var m1 = Parse(exampleJSON).Value().(map[string]any)
+	var m2 map[string]any
 	if err := json.Unmarshal([]byte(exampleJSON), &m2); err != nil {
 		t.Fatal(err)
 	}
@@ -2549,7 +2549,7 @@ func TestGroup(t *testing.T) {
 	assert(t, res == `["123"]`)
 }
 
-func goJSONMarshal(i interface{}) ([]byte, error) {
+func goJSONMarshal(i any) ([]byte, error) {
 	buffer := &bytes.Buffer{}
 	encoder := json.NewEncoder(buffer)
 	encoder.SetEscapeHTML(!DisableEscapeHTML)
